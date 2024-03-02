@@ -1,1 +1,1 @@
-export { ValidateDateError } from './validate-date-error.exception';
+export { InvalidDateFormatError } from './validate-date-error.exception';

@@ -7,7 +7,7 @@ type Constructor = {
   cause?: unknown;
 };
 
-class ValidateDateError extends AppError {
+class InvalidDateFormatError extends AppError {
   public constructor({
     message = ErrorMessage.INVALID_INPUT_FORMAT,
     cause,
@@ -20,4 +20,4 @@ class ValidateDateError extends AppError {
   }
 }
 
-export { ValidateDateError };
+export { InvalidDateFormatError };
