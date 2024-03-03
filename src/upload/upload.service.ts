@@ -1,7 +1,11 @@
 import xlsx from 'node-xlsx';
 import { type Response, type Request } from 'express';
 import { HttpCode, HttpMessage } from '../packages/http/http';
-import { getCurrencyRates, getInvoicingMonth } from '../helpers/helpers';
+import {
+  getCurrencyRates,
+  getInvoicesData,
+  getInvoicingMonth,
+} from '../helpers/helpers';
 
 class UploadService {
   public static processUpload(request: Request, response: Response) {
@@ -17,12 +21,13 @@ class UploadService {
 
     const workbook = xlsx.parse(uploadedFile);
     const InvoicingMonth = getInvoicingMonth(workbook);
-    const currencyRates = getCurrencyRates(workbook);
+    const { currencyRates, id } = getCurrencyRates(workbook);
+    const invoicesData = getInvoicesData({ workbook, id, currencyRates });
 
     return {
       InvoicingMonth,
       currencyRates,
-      invoicesData: workbook,
+      invoicesData,
     };
   }
 }
