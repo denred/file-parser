@@ -1,4 +1,5 @@
 import { Header, Status, type UploadedFile } from '../types/types';
+import { checkCurrencyRates } from './check-currency-rates.helper';
 import { checkTotalPrice } from './check-total-price.helper';
 import { getTotalInvoice } from './get-total-invoice.helper';
 import {
@@ -44,9 +45,17 @@ const getInvoicesData = ({
         validationErrors.push(error as string);
       }
 
-      invoiceData[Header.INVOICE_TOTAL] = isValid
-        ? getTotalInvoice(invoiceData, currencyRates)
-        : null;
+      const { isValid: isCurrencyRatesValid, error: currencyRatesError } =
+        checkCurrencyRates(invoiceData, currencyRates);
+
+      if (!isCurrencyRatesValid) {
+        validationErrors.push(currencyRatesError as string);
+      }
+
+      invoiceData[Header.INVOICE_TOTAL] =
+        isValid && isCurrencyRatesValid
+          ? getTotalInvoice(invoiceData, currencyRates)
+          : null;
 
       invoiceData[Header.VALIDATION_ERRORS] = validationErrors;
       invoicesData.push(invoiceData);

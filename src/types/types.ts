@@ -58,4 +58,6 @@ enum Header {
   VALIDATION_ERRORS = 'validationErrors',
 }
 
-export { type InvoiceData, type UploadedFile, Header, Status };
+type ValueOf<T> = T[keyof T];
+
+export { type InvoiceData, type UploadedFile, Header, Status, ValueOf };

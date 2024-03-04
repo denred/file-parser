@@ -6,21 +6,27 @@ import {
   getInvoicesData,
   getInvoicingMonth,
 } from '../helpers/helpers';
+import { FileError, InvalidDateFormatError } from '../exceptions/exceptions';
 
 class UploadService {
   public static processUpload(request: Request, response: Response) {
     const { fields, files } = request;
-    const fileName = fields?.title;
+    const [fileName] = fields?.title ?? [];
     const uploadedFile = files?.file?.[0].filepath;
 
     if (!uploadedFile) {
-      return response
-        .status(HttpCode.BAD_REQUEST)
-        .json({ error: HttpMessage.FILE_DOES_NOT_EXIST });
+      throw new FileError({});
     }
 
     const workbook = xlsx.parse(uploadedFile);
     const InvoicingMonth = getInvoicingMonth(workbook);
+
+    if (!(fileName?.trim() === InvoicingMonth?.trim())) {
+      throw new InvalidDateFormatError({
+        message: HttpMessage.INVOICING_DATE_MISMATCH,
+      });
+    }
+
     const { currencyRates, id } = getCurrencyRates(workbook);
     const invoicesData = getInvoicesData({ workbook, id, currencyRates });
 

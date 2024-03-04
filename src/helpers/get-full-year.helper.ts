@@ -1,4 +1,4 @@
-import { InvalidDateFormatError } from '../exceptions/validate-date-error.exception';
+import { InvalidDateFormatError } from '../exceptions/invalid-date-format-error.exception';
 
 const FULL_YEAR_DIGITS = 4;
 const ANNIVERSARY_PREFIX = '20';

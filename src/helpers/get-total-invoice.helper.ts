@@ -12,6 +12,14 @@ const getTotalInvoice = (
   const itemPriceCurrency = String(invoice[Header.ITEM_PRICE_CURRENCY]);
   const invoiceCurrency = String(invoice[Header.INVOICE_CURRENCY]);
 
+  if (
+    isNaN(totalPrice) ||
+    !currencyRates[itemPriceCurrency] ||
+    !currencyRates[invoiceCurrency]
+  ) {
+    return undefined;
+  }
+
   if (itemPriceCurrency === invoiceCurrency) {
     return totalPrice;
   }
